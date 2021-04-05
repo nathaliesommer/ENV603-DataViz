@@ -6,7 +6,9 @@ ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
   geom_point()
 
-# What does the error message mean here? --> (comment your answer)
+view(organdata)
+
+# What does the error message mean here? --> (comment your answer) 34 country rows didn't have data for each year,so they were removed.
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
@@ -45,6 +47,17 @@ ggplot(data = organdata,
   coord_flip() + 
   theme(legend.position = "top")
 
+#Added Jitter
+ggplot(data = organdata,
+       mapping = aes(x = reorder(country, donors, na.rm=TRUE),
+                     y = donors, color = world)) +
+  geom_point() + 
+  labs(x=NULL) + 
+  coord_flip() + 
+  theme(legend.position = "top") +
+  geom_jitter()
+
+
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
 
 # A better altnerative to a jittered plot might be a Cleveland dot plot. Before we can get to a Cleveland dot plot, we'll need to do some summarizing.
@@ -54,7 +67,7 @@ by_country <- organdata %>% group_by(consent_law, country) %>%
 
 by_country
 
-# What happened inside this pipeline? --> (comment your answer here)
+# What happened inside this pipeline? --> (Filtered by consent law, based on number of entries per country with a consent law?)
 
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
@@ -63,7 +76,12 @@ ggplot(data = by_country,
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
        y = "", color = "Consent Law") +
-  theme(legend.position="top")
+  theme(legend.position="right") +
+  theme_bw() +
+  theme(panel.grid.minor =   element_blank(),
+        panel.grid.major =   element_line(colour = "slategray1",size=0.1)) +
+  facet_wrap(~ consent_law, ncol = 4) +
+  labs(title = "Countries with Presumed Consent Laws Have Higher Rates of Organ Donation")
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
 
