@@ -6,7 +6,7 @@ ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
   geom_point()
 
-# What does the error message mean here? --> (comment your answer)
+# What does the error message mean here? --> The error message automatically the dataset's removed missing data points from its mapping process)
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
@@ -20,6 +20,13 @@ ggplot(data = organdata,
   geom_boxplot()
 
 # This doesn't look great... try adding coord_flip() to the code above.
+
+?coord_flip
+
+ggplot(data = organdata,
+       mapping = aes(x = country, y = donors)) + 
+  geom_boxplot() +
+  coord_flip()
 
 # Better, but not ideal. We probably want our countries listed from high to low avg donation rate, rather than alphabetical order.
 ggplot(data = organdata,
@@ -43,7 +50,8 @@ ggplot(data = organdata,
   geom_point() + 
   labs(x=NULL) + 
   coord_flip() + 
-  theme(legend.position = "top")
+  theme(legend.position = "top") +
+  geom_jitter()
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
 
@@ -54,7 +62,8 @@ by_country <- organdata %>% group_by(consent_law, country) %>%
 
 by_country
 
-# What happened inside this pipeline? --> (comment your answer here)
+# What happened inside this pipeline? --> The code first grouped the df by consent, then secondarily by country.
+# Next, the code summarized only the numeric values to get their averages and standard deviations.
 
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
@@ -63,11 +72,25 @@ ggplot(data = by_country,
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
        y = "", color = "Consent Law") +
-  theme(legend.position="top")
+  theme(legend.position="top") +
+  facet_wrap(~consent_law, ncol = 1, nrow = 2)
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
 
+# Not a fan of facet wrapping in this context: if we want to compare consent laws in context with overall procurement, then comparing the two groups in the same graph draws the comparison more efficiently instead of the audience's eyes flicking between 2 graphs.
+# The original color split and legend was more elegant.
+
 # Finally, add a title and remove gridlines. Once you are happy with your final Cleveland dot plot, save it.
+
+ggplot(data = by_country,
+       mapping = aes(x = donors_mean, y = reorder(country, donors_mean),
+                     color = consent_law)) + 
+  geom_point(size=3) +
+  labs(x = "Donor Procurement Rate",
+       y = "", color = "Consent Law") +
+  ggtitle("Presumed Organ Donation Consent Laws Loosely Correspond with Higher Procurement") +
+  theme_bw() +
+  theme(legend.position="top", panel.grid = element_blank(), panel.border = element_blank())
 
 ggsave("plot2.png",
        plot = last_plot(),
