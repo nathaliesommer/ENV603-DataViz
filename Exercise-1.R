@@ -43,6 +43,22 @@ p2
 # (3) Reorder the bars
 # (4) Choose a new color scheme
 
+library(viridis)
+
+ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
+  geom_col(position = "dodge2") +
+  labs(x = "Region",y = "Percent", fill = "Religion") +
+  theme(legend.position = "top") +
+  ggtitle("Protestants Comprise Majority of US Religious Affiliation") +
+  theme_bw() +
+  theme(panel.grid = element_blank(), panel.border = element_blank()) +
+  scale_color_viridis(discrete = FALSE, option = "C")
+
+p3
+
+?geom_col
+?geom_histogram
+
 # Once you're happy with your changes, save your plot:
 ggsave("plot1.png",
   plot = last_plot(),
