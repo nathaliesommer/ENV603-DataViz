@@ -5,7 +5,7 @@
 ggplot(data = by_country,
        mapping = aes(x = roads_mean, y = donors_mean)) + 
   geom_point() + 
-  geom_text(mapping = aes(label = country))
+  geom_text(mapping = aes(label = country), hjust = 1)
 # This looks terrible. Let's adjust the position of the text. Within the geom_text(), add the argument for hjust=1
 
 # This still looks terrible. You could continue to mess around with values for hjust and get there eventually. Instead, let's call up a new package and explore how to add better labels to plots using a new dataset
@@ -21,7 +21,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
-  #geom_text_repel() +
+  geom_text_repel() +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -120,6 +120,39 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
 # (2) Includes annotated text
 # (3) Includes an annotated shape
 # Be sure to update the title and caption accordingly. 
+
+ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
+                               label = winner_label)) + 
+  geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_point() +
+  geom_text_repel(data = subset(elections_historic,
+                                year %in% "1984" |
+                                  winner %in% "Ronald Reagon")) +
+  geom_text_repel(data = subset(elections_historic,
+                                year %in% "1980" |
+                                  winner %in% "Ronald Reagon")) +
+  annotate(geom="text", x = .45, y = .95,
+           label = "Reagan picked up close to 10% more of the popular vote for his second term.",
+           hjust=0, 
+           fontface="italic", 
+           color = "red") +
+  annotate(geom = "segment", 
+           x = .51, xend = .58,
+           y = .91, yend = .97, 
+           colour = "red",
+           alpha = .4,
+           arrow =arrow()) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  theme_classic() + # removes gridlines
+  labs(x = "Winner's share of popular vote", 
+       y = "Winner's share of electoral college vote", 
+       title = "Presidential Elections: Popular & Electoral College Margins", 
+       subtitle = "1824-2016",
+       caption = "Reagan doubled his winning margin from 1980 to 1984, from 8.4 million to 16.8 million votes.") # adds a caption
+
+e <-  elections_historic
 
 # Save your plot: 
 
