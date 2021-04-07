@@ -8,6 +8,8 @@ ggplot(data = organdata,
 
 # What does the error message mean here? --> (comment your answer)
 
+# Warning message: Removed 34 rows containing missing values (geom_point). This means that 34 rows had a null or missing value and R did not attempt to graph those.
+
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
@@ -18,8 +20,11 @@ ggplot(data = organdata,
 ggplot(data = organdata,
        mapping = aes(x = country, y = donors)) + 
   geom_boxplot()
+  coord_flip()
 
 # This doesn't look great... try adding coord_flip() to the code above.
+  
+# Much better!
 
 # Better, but not ideal. We probably want our countries listed from high to low avg donation rate, rather than alphabetical order.
 ggplot(data = organdata,
@@ -44,6 +49,7 @@ ggplot(data = organdata,
   labs(x=NULL) + 
   coord_flip() + 
   theme(legend.position = "top")
+  geom_jitter()
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
 
@@ -56,6 +62,8 @@ by_country
 
 # What happened inside this pipeline? --> (comment your answer here)
 
+#I received an error message that funs() was deprecated in dplyr 0.8.0, and R suggested some alternatives
+
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
        mapping = aes(x = donors_mean, y = reorder(country, donors_mean),
@@ -63,11 +71,17 @@ ggplot(data = by_country,
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
        y = "", color = "Consent Law") +
-  theme(legend.position="top")
-
+  theme(legend.position="bottom", panel.background = element_blank()) +
+  labs(title = "Organ Donation Rates Increase Under Presumed Consent") +
+  facet_wrap(~consent_law)
+  
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
 
+# This worked so well!
+
 # Finally, add a title and remove gridlines. Once you are happy with your final Cleveland dot plot, save it.
+
+#To edit this plot, I added a title and removed the gridlines. I also moved the legend to the bottom.
 
 ggsave("plot2.png",
        plot = last_plot(),
