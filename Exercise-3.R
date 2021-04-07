@@ -5,8 +5,10 @@
 ggplot(data = by_country,
        mapping = aes(x = roads_mean, y = donors_mean)) + 
   geom_point() + 
-  geom_text(mapping = aes(label = country))
+  geom_text(mapping = aes(label = country), hjust=1)
 # This looks terrible. Let's adjust the position of the text. Within the geom_text(), add the argument for hjust=1
+
+# Added hjust=1
 
 # This still looks terrible. You could continue to mess around with values for hjust and get there eventually. Instead, let's call up a new package and explore how to add better labels to plots using a new dataset
 install.packages("ggrepel")
@@ -21,7 +23,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
-  #geom_text_repel() +
+  geom_text_repel() +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -30,6 +32,8 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
        subtitle = "1824-2016")
 
 # Now, uncomment the geom_text_repel() above and replot. See what happens to the labels if you adjust the size of your plot window in RStudio. 
+
+# Wow! Uncommented geom_text_repel() and it looks a lot different...but too busy still.
 
 # It's messy, but all points are labeled without tremendous overlaps. For this plot, we might be more interested in how far away each point is from the 50% threshold on both axis, or in the outcome of a particular election. So, it might make more sense to pick out points of interest in the data instead of labelling every single point. And this is where geom_text_repel() is powerful.
 
@@ -120,6 +124,35 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
 # (2) Includes annotated text
 # (3) Includes an annotated shape
 # Be sure to update the title and caption accordingly. 
+
+#My new graph
+
+ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
+                               label = winner_label)) + 
+  geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_point() +
+  geom_text_repel(data = subset(elections_historic,
+                                year %in% "1864"|
+                                  winner %in% "Lyndon Johnson")) +
+  annotate(geom="text", x = .47, y = .9,
+           label = "100 years apart, Lincoln and Johson both \n won 90% of the electoral college vote",
+           fontface = "bold",
+           color = "navy",
+           hjust=1) +
+  annotate(geom="rect", xmin = .515, xmax = .63, ymin = .85, ymax = .95,
+           alpha = .2) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  theme_classic() +
+  labs(x = "Winner's share of popular vote", 
+       y = "Winner's share of electoral college vote", 
+       title = "Presidential Elections: Popular & Electoral College Margins", 
+       subtitle = "1824-2016",
+       caption = "At 60%, Johnson's 1964 victory was one of the highest recorded popular votes; Lincoln's popular vote in 1864 topped out at 55%.")
+
+# I wanted to highlight Lincoln's 1864 victor and Johnson's 1964 one hundred years later, as both are outliers.
+# To do this, I labeled both points, added text annotation, a caption at the bottom, and a gray box around both victories to draw attention to them.
 
 # Save your plot: 
 
