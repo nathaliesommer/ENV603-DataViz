@@ -77,6 +77,6 @@ ggplot(data = by_country,
 
 # Finally, add a title and remove gridlines. Once you are happy with your final Cleveland dot plot, save it.
 
-ggsave("plot2.png",
+ggsave("Wraithwall_plot2.png",
        plot = last_plot(),
        dpi = 300)
