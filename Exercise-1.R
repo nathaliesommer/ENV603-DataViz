@@ -60,6 +60,6 @@ p2
 # (4) Choose a new color scheme
 
 # Once you're happy with your changes, save your plot:
-ggsave("plot1.png",
+ggsave("Wraithwall_plot1.png",
   plot = last_plot(),
   dpi = 300)
