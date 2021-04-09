@@ -8,7 +8,7 @@ library(socviz)
 
 # Create a new table called rel_by_region
 
-rel_by_region <- gss_sum %>%
+rel_by_region <- gss_sm %>%
   group_by(bigregion, religion) %>%
   summarize(N = n()) %>%
   mutate(freq = N / sum(N),
@@ -16,24 +16,40 @@ rel_by_region <- gss_sum %>%
 
 # See how the pipeline above has taked the gss_sm dataframe and transformed it into a summary table.
 
-View(gss_sum)
+View(gss_sm)
 View(rel_by_region)
 
 # Now let's make some plots!
 
 p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
-  labs(x = "Region",y = "Percent", fill = "Religion") +
+  labs(x = "Region",y = "Percent", fill = "Religion", 
+       title = "Predominant Religions by Region Across the United States") +
   theme(legend.position = "top")
 
 p1
 
-p2 <- ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
+my_data <- as_tibble(rel_by_region)
+my_data %>% arrange(religion)
+my_data
+
+my_data %>% arrange(desc(religion))
+
+ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
   geom_col(position = "dodge2") +
-  labs(x = NULL, y = "Percent", fill = "Religion") +
+  labs(x = NULL, y = "Percent", fill = "Religion",
+       title = "Predominant Religions by Region Across the United States",
+       subtitle = "Catholics edge out Protestants in the NE") +
   guides(fill = FALSE) + 
   coord_flip() + 
-  facet_grid(~ bigregion)
+  theme_bw() + theme(strip.background  = element_blank(),
+                      panel.grid.major = element_line(colour = "grey80"),
+                      panel.border = element_blank(),
+                      panel.grid.minor.x=element_blank(),
+                      panel.grid.major.x=element_blank() ) +
+  theme(legend.position="bottom") +
+  facet_grid(~ bigregion) 
+
 
 p2
 
