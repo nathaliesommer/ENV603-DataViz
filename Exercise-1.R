@@ -28,15 +28,17 @@ p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) +
                                "Jewish" = "#F0E442",
                                "None" = "#0072B2",
                                "Other" = "#D55E00",
-                               "NA" = "#CC79A7")) +
+                               "NA" = "#CC79A7")) + #I chose this palette because it's colorblind-friendly
   labs(x = "Region",y = "Percent of Population", fill = "Religion") +
   theme(legend.position = "right", panel.background = element_blank())
 
 p1 <- p1 + labs(title = "West Coasters Least Likely to List Religious Affiliation",
-                subtitle = "Regional Variations Across the United States")
+                subtitle = "Regional Variations Across the United States") #this adds a title and subtitle
 p1
 
 p1
+
+#Comenting out p2 so I can focus on p1!
 
 # p2 <- ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
 # geom_col(position = "dodge2") +
@@ -52,6 +54,11 @@ p1
 # (2) Remove the gridlines
 # (3) Reorder the bars
 # (4) Choose a new color scheme
+
+#Notes on changes: 
+# I added a title, removed the gridlines, and chose a new color scheme
+# In addition, I moved the legend to the right
+# I wasn't able to figure out how to reorder the bars while keeping them bucketed--something to keep experimenting with!
 
 # Once you're happy with your changes, save your plot:
 ggsave("plot1.png",
