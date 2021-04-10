@@ -8,6 +8,9 @@ ggplot(data = organdata,
 
 # What does the error message mean here? --> (comment your answer)
 
+# There are NA Values for 34 of the rows
+
+
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
@@ -17,6 +20,9 @@ ggplot(data = organdata,
 # Leaving the timeseries aside, we can also look at the number of donors by country:
 ggplot(data = organdata,
        mapping = aes(x = country, y = donors)) + 
+  
+  # Added coordflip() which makes it look better!
+  coord_flip()+
   geom_boxplot()
 
 # This doesn't look great... try adding coord_flip() to the code above.
@@ -43,6 +49,9 @@ ggplot(data = organdata,
   geom_point() + 
   labs(x=NULL) + 
   coord_flip() + 
+  
+  # Added geom_jitter()
+  geom_jitter() +
   theme(legend.position = "top")
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
@@ -56,6 +65,11 @@ by_country
 
 # What happened inside this pipeline? --> (comment your answer here)
 
+#We took the organ data and then organized it into by_country. 
+#It is ordered first by laws around consent and then by country.
+#We chose to only summarize the numeric data using averages and standard deviations.  
+#The na.rm part is to not have the missing values mess up our calculations
+
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
        mapping = aes(x = donors_mean, y = reorder(country, donors_mean),
@@ -63,11 +77,23 @@ ggplot(data = by_country,
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
        y = "", color = "Consent Law") +
-  theme(legend.position="top")
+  
+  #Added facet_wrap() by consent law
+  facet_wrap(~consent_law) +
+  theme(legend.position="top") +
+  
+  #Removed grid lines
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+
+#Added title and fixed x axis label
+  labs(title = "Countries with Presumed Consent Laws More Likely To Donate Organs", x = "Donor Procurement Rate (%)")
+
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
 
-# Finally, add a title and remove gridlines. Once you are happy with your final Cleveland dot plot, save it.
+# Finally, add a title and remove grid lines. Once you are happy with your final Cleveland dot plot, save it.
 
 ggsave("plot2.png",
        plot = last_plot(),
