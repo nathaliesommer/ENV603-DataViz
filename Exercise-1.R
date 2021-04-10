@@ -23,7 +23,7 @@ View(rel_by_region)
 
 p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
-  labs(x = "Region",y = "Percent", fill = "Religion") +
+  labs(title = "Protestant Relgion is most prominent in the South and Midwest Region in the US", subtitle = "Distribution of Religions across the United States", x = "Region in the United States",y = "Percent Distribution", fill = "Religion") +
   theme(legend.position = "bottom")
 
 p1
