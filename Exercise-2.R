@@ -8,6 +8,8 @@ ggplot(data = organdata,
 
 # What does the error message mean here? --> (comment your answer)
 
+# The error points out that there are missing values in the data which R was unable to plot
+
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
