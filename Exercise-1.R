@@ -21,10 +21,12 @@ View(rel_by_region)
 
 # Now let's make some plots!
 
-p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
+p1 <- ggplot(rel_by_region, aes(x = reorder(bigregion, pct), y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
+  scale_fill_brewer(palette = 4)+
   labs(x = "Region",y = "Percent", fill = "Religion") +
-  theme(legend.position = "top")
+  ggtitle("Breakdown of Religious Affiliation by Region in the US") +
+  theme(legend.position = "top",panel.grid.major = element_blank(),panel.grid.minor = element_blank())
 
 p1
 
@@ -33,6 +35,7 @@ p2 <- ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
   labs(x = NULL, y = "Percent", fill = "Religion") +
   guides(fill = FALSE) + 
   coord_flip() + 
+  ggtitle("Breakdown of Religion by Region in the US") +
   facet_grid(~ bigregion)
 
 p2
@@ -44,6 +47,6 @@ p2
 # (4) Choose a new color scheme
 
 # Once you're happy with your changes, save your plot:
-ggsave("plot1.png",
+ggsave("HWplot1.png",
   plot = last_plot(),
   dpi = 300)
