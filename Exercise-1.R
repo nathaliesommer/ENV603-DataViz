@@ -24,7 +24,7 @@ View(rel_by_region)
 p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
   labs(x = "Region",y = "Percent", fill = "Religion") +
-  theme(legend.position = "top")
+  theme(legend.position = "bottom")
 
 p1
 
