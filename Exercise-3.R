@@ -126,26 +126,26 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
                                label = winner_label)) + 
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
-  geom_point(aes(color = year)) +
+  geom_point(aes(color = year)) + # adding the year dimension via color of the dots, just to show there is not a clear historical trend over the years
   geom_text_repel(data = subset(elections_historic,
-                                year %in% "1912" | year %in% "2016" |
+                                year %in% "1912" | year %in% "2016" | # adding 2016 election annotation for context
                                   winner %in% "John Quincy Adams")) +
   annotate(geom="text", x = .31, y = .97,
            label = "19 presidential elections have been won\nwith less than 50% of the popular vote.",
            hjust=0, 
            fontface="bold", 
-           color = "steelblue") +
+           color = "steelblue") + # adding caption for context of shape annotation
   annotate(geom = "rect", 
            xmin = .29, xmax = .5,
            ymin = .29, ymax = 1, 
            colour = "blue",
-           alpha = 0) +
+           alpha = 0) + # adding rectangle around all points to the left of the 50% popular vote line, meaning the election was won without a majority of the popular vote
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   theme_classic() + # removes gridlines
   labs(x = "Winner's share of popular vote", 
        y = "Winner's share of electoral college vote", 
-       title = "Electoral college victories without the popular vote are not a new phenomenon", 
+       title = "Electoral college victories without the popular vote are not a new phenomenon", #my new main point of the graph
        subtitle = "All presidential elections, 1824-2016") + 
   theme(plot.title = element_text(face = "bold"), plot.subtitle = element_text(face = "italic"))
        # caption = "Electoral college victories without the popular vote are not a new phenomenon.")
