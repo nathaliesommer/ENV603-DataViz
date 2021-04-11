@@ -5,7 +5,9 @@
 ggplot(data = by_country,
        mapping = aes(x = roads_mean, y = donors_mean)) + 
   geom_point() + 
-  geom_text(mapping = aes(label = country))
+  
+  # Added argument for hjust=1
+  geom_text(hjust =1, mapping = aes(label = country))
 # This looks terrible. Let's adjust the position of the text. Within the geom_text(), add the argument for hjust=1
 
 # This still looks terrible. You could continue to mess around with values for hjust and get there eventually. Instead, let's call up a new package and explore how to add better labels to plots using a new dataset
@@ -21,7 +23,8 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
-  #geom_text_repel() +
+  #Uncommented arg below
+  geom_text_repel() +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -93,26 +96,38 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_point() +
   geom_text_repel(data = subset(elections_historic,
                                 year %in% "1912" |
-                                winner %in% "John Quincy Adams")) +
+                                year %in% "1980")) +
   annotate(geom="text", x = .3, y = .93,
-           label = "Wilson still performed better than \n Adams' 30% share of the popular vote.",
-           hjust=0, 
+  
+           #Changed annotation 
+           label = "Wilson performed almost as well as Reagan in the electoral college despite a much weaker popular vote margin",
+           hjust=0,
+           #changed positioning of annotation
+           vjust=-1,
            fontface="italic", 
            color = "red") +
   annotate(geom = "segment", 
-           x = .41, xend = .32,
-           y = .78, yend = .37, 
-           colour = "red",
-           alpha = .4,
+           
+           #Changed where the arrow ended
+           
+           x = .42, xend = .508,
+           y = .82, yend = .91, 
+           colour = "purple",
+           alpha = .7,
            arrow =arrow()) +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
-  theme_classic() + # removes gridlines
+  theme_classic() + # removes grid lines
   labs(x = "Winner's share of popular vote", 
        y = "Winner's share of electoral college vote", 
-       title = "Presidential Elections: Popular & Electoral College Margins", 
-       subtitle = "1824-2016",
-       caption = "Wilson took advantage of a Republican split, winning 40 states with just 41.8% of the popular vote.") # adds a caption
+       
+       #Added New Title
+       title = "Electoral College Winners Can Achieve Huge Wins With Varying Levels of Support", 
+       subtitle = "Election Winners 1824-2016",
+    
+       
+       #Add a new caption here
+       caption = "Despite getting 9% less of the popular vote than Reagan (only 42%), Wilson managed to get over 80% of the electoral college vote.") # adds a caption
 
 
 # Armed with the numerous examples from above, and using the elections_historic dataset, make a new graph that:
