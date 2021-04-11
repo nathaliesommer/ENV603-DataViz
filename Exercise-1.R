@@ -1,25 +1,23 @@
-#### ENV 603 / 5-April-2021 / N.R. Sommer
+#### ENV 603 / 11-April-2021 / Aymane Eddahmani
 # Dataset 1: Religion by region
 
-# If you have not yet installed these libraries, use install.packages("")
 
 library(tidyverse)
 library(socviz)
 
 # Create a new table called rel_by_region
-
-rel_by_region <- gss_sum %>%
+rel_by_region <- gss_sm %>%
   group_by(bigregion, religion) %>%
   summarize(N = n()) %>%
   mutate(freq = N / sum(N),
          pct = round((freq*100), 0))
 
-# See how the pipeline above has taked the gss_sm dataframe and transformed it into a summary table.
 
-View(gss_sum)
+
+View(gss_sm)
 View(rel_by_region)
 
-# Now let's make some plots!
+# Now let's make some plots! blabla
 
 p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
