@@ -43,6 +43,17 @@ p2
 # (3) Reorder the bars
 # (4) Choose a new color scheme
 
+p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
+  geom_col(position = "dodge2") +
+  labs(x = "Region",y = "Percent", fill = "Religion") +
+  theme(legend.position = "top") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  labs(title="Religion by U.S. Region", subtitle="Percent of practitioners in major U.S. regions") +
+  scale_fill_brewer(palette = "Pastel1")
+
+p1
+
 # Once you're happy with your changes, save your plot:
 ggsave("plot1.png",
   plot = last_plot(),
