@@ -3,12 +3,17 @@
 
 # If you have not yet installed these libraries, use install.packages("")
 
+#Installed Socviz package
+
+install.packages("socviz")
 library(tidyverse)
 library(socviz)
 
 # Create a new table called rel_by_region
 
-rel_by_region <- gss_sum %>%
+#Removed extra u in gss_sum
+
+rel_by_region <- gss_sm %>%
   group_by(bigregion, religion) %>%
   summarize(N = n()) %>%
   mutate(freq = N / sum(N),
@@ -16,15 +21,32 @@ rel_by_region <- gss_sum %>%
 
 # See how the pipeline above has taked the gss_sm dataframe and transformed it into a summary table.
 
-View(gss_sum)
+View(gss_sm)
 View(rel_by_region)
 
 # Now let's make some plots!
 
-p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
+#Reordered by big region. Had trouble reordering within each region, but I still like how it looks. 
+p1 <- ggplot(rel_by_region, aes(x = reorder(bigregion, -pct), y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
-  labs(x = "Region",y = "Percent", fill = "Religion") +
-  theme(legend.position = "top")
+  
+  #Changed Colors
+  scale_fill_brewer(palette="Greens") +
+  
+  # Added a title and fixed y-axis label
+  labs(x = "Region",y = "Percent of Region", fill = "Religion", title = "Northeastern US is Only Region Without Plurality of Protestants") +
+  theme(legend.position = "top") +
+  
+  #Removed Grid lines and Grey Background
+  theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+             panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+  #Moved Save Options Up
+
+  ggsave("Exercise1Plot1.png",
+       plot = last_plot(),
+       dpi = 300)
 
 p1
 
