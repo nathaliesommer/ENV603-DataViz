@@ -127,7 +127,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
   annotate(geom="text", x = .48, y = .4,
-           label = "Johnson won the highestt share of popular vote \n while adams won the lowest share: \n a difference of 30%",
+           label = "Johnson won the highest share of popular vote \n while adams won the lowest share: \n a difference of 30%",
            hjust=0.5, 
            fontface="italic", 
            color = "red") +
@@ -160,5 +160,3 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
 ggsave("plot3.png",
        plot = last_plot(),
        dpi = 300)
-
-view(elections_historic)
