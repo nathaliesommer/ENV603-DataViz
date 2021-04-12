@@ -1,9 +1,7 @@
 #### ENV 603 / 5-April-2021 / N.R. Sommer
 # Dataset 1: Religion by region
 
-# If you have not yet installed these libraries, use install.packages("")
-
-### A NEW NOTE### 
+# If you have not yet installed these libraries, use install.package("")
 
 library(tidyverse)
 library(socviz)
@@ -16,9 +14,9 @@ rel_by_region <- gss_sm %>%
   mutate(freq = N / sum(N),
          pct = round((freq*100), 0))
 
-# See how the pipeline above took the gss_sm dataframe and transformed it into a summary table.
+# See how the pipeline above has taked the gss_sm dataframe and transformed it into a summary table.
 
-View(gss_sm)
+View(gss_sum)
 View(rel_by_region)
 
 # Now let's make some plots!
@@ -44,6 +42,8 @@ p2
 # (2) Remove the gridlines
 # (3) Reorder the bars
 # (4) Choose a new color scheme
+
+library(RColorBrewer)
 
 p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
