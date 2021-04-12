@@ -6,7 +6,7 @@ ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
   geom_point()
 
-# What does the error message mean here? --> (comment your answer)
+# What does the error message mean here? --> there are rows with missing values in the dataset. geom_point has not plotted those
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
