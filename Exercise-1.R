@@ -3,6 +3,8 @@
 
 # If you have not yet installed these libraries, use install.packages("")
 
+### A NEW NOTE### 
+
 library(tidyverse)
 library(socviz)
 
