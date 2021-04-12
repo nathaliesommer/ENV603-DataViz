@@ -5,7 +5,7 @@
 ggplot(data = by_country,
        mapping = aes(x = roads_mean, y = donors_mean)) + 
   geom_point() + 
-  geom_text(mapping = aes(label = country))
+  geom_text(mapping = aes(label = country), hjust = 1)
 # This looks terrible. Let's adjust the position of the text. Within the geom_text(), add the argument for hjust=1
 
 # This still looks terrible. You could continue to mess around with values for hjust and get there eventually. Instead, let's call up a new package and explore how to add better labels to plots using a new dataset
@@ -21,7 +21,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
-  #geom_text_repel() +
+  geom_text_repel() +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -39,7 +39,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
   geom_text_repel(data = subset(elections_historic,
-                                ec_pct < 0.7 & popular_pct < 0.4)) +
+                                ec_pct < 0.7 & popular_pct < 0.4)) + #here we've made a condition for when we want to see the label
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -120,6 +120,35 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
 # (2) Includes annotated text
 # (3) Includes an annotated shape
 # Be sure to update the title and caption accordingly. 
+
+
+ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
+                               label = winner_label)) + 
+  geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_point() +
+  geom_text_repel(data = subset(elections_historic,
+                                popular_margin < 0)) +
+  annotate(geom="text", x = .3, y = .67,
+           label = "Trump was arguably the worst US President, and didn't even win the popular vote!",
+           hjust=0, 
+           fontface="italic", 
+           color = "red") +
+  annotate(geom = "segment", 
+           x = .46, xend = .35,
+           y = .57, yend = .65, 
+           colour = "red",
+           alpha = .4,
+           arrow =arrow()) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  theme_classic() + # removes gridlines 
+  labs(x = "Winner's share of popular vote", 
+       y = "Winner's share of electoral college vote", 
+       title = "Presidential Elections: Popular & Electoral College Margins", 
+       subtitle = "1824-2016",
+       caption = "In the last nearly 200 years, 5 presidents had a negative popular vote margin, and two of them were in the 21st century.") # adds a caption
+
 
 # Save your plot: 
 

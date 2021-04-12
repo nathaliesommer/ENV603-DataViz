@@ -16,24 +16,33 @@ rel_by_region <- gss_sum %>%
 
 # See how the pipeline above has taked the gss_sm dataframe and transformed it into a summary table.
 
-View(gss_sum)
+View(gss_sm)
 View(rel_by_region)
 
 # Now let's make some plots!
 
-p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
+p1 <- ggplot(rel_by_region, aes(x = reorder(bigregion,pct), y = pct, fill = religion)) + #have reordered the data here by pct
   geom_col(position = "dodge2") +
+  ggtitle("Religious Affiliation Breakdown in the US by region", subtitle="There are more Jews in the Northeast than anywhere in the US!") +
   labs(x = "Region",y = "Percent", fill = "Religion") +
-  theme(legend.position = "top")
+  scale_y_continuous(breaks=seq(0,70,30)) + #changing the gridlines
+  scale_fill_brewer(palette = "Set3") + #changing the colour palette for the bars
+  theme(legend.position = "top") +
+  theme_light() #changing the chart theme
 
 p1
 
-p2 <- ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
+p2 <- ggplot(rel_by_region, aes(x = reorder(religion,pct), y = pct, fill = religion)) +
   geom_col(position = "dodge2") +
+  ggtitle("Religious Affiliation Breakdown in the US by region", subtitle="There are more Protestants in the South than anywhere in the US!") +
   labs(x = NULL, y = "Percent", fill = "Religion") +
+  #scale_y_discrete(breaks = seq(0,70,40)) +
+  #scale_x_discrete(breaks = seq(0,70,40)) +
   guides(fill = FALSE) + 
   coord_flip() + 
-  facet_grid(~ bigregion)
+  facet_grid(~ bigregion) +
+  scale_fill_brewer(palette = "Set3") +
+  theme_minimal()
 
 p2
 
