@@ -1,4 +1,4 @@
-#### ENV 603 / 5-April-2021 / N.R. Sommer
+#### ENV 603 / 11-April-2021 / A.M. Creel
 # Dataset 2: Organ transplants for OECD countries
 
 # We'll start by naively graphing some of this data. Take a look at a scatterplot of organ donors vs time. 
@@ -6,7 +6,7 @@ ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
   geom_point()
 
-# What does the error message mean here? --> (comment your answer)
+# What does the error message mean here? --> (I'm not getting an error by I get a warning about NAs)
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
@@ -20,6 +20,10 @@ ggplot(data = organdata,
   geom_boxplot()
 
 # This doesn't look great... try adding coord_flip() to the code above.
+ggplot(data = organdata,
+       mapping = aes(x = country, y = donors)) + 
+  geom_boxplot() +
+  coord_flip() 
 
 # Better, but not ideal. We probably want our countries listed from high to low avg donation rate, rather than alphabetical order.
 ggplot(data = organdata,
@@ -46,6 +50,14 @@ ggplot(data = organdata,
   theme(legend.position = "top")
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
+ggplot(data = organdata,
+       mapping = aes(x = reorder(country, donors, na.rm=TRUE),
+                     y = donors, color = world)) +
+  geom_point() + 
+  labs(x=NULL) + 
+  coord_flip() + 
+  theme(legend.position = "top") +
+  geom_jitter()
 
 # A better altnerative to a jittered plot might be a Cleveland dot plot. Before we can get to a Cleveland dot plot, we'll need to do some summarizing.
 by_country <- organdata %>% group_by(consent_law, country) %>%
@@ -54,7 +66,7 @@ by_country <- organdata %>% group_by(consent_law, country) %>%
 
 by_country
 
-# What happened inside this pipeline? --> (comment your answer here)
+# What happened inside this pipeline? --> we grouped countries by their consent law status and calculated the average donors and sd for each numeric variable
 
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
@@ -66,8 +78,28 @@ ggplot(data = by_country,
   theme(legend.position="top")
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
+ggplot(data = by_country,
+       mapping = aes(x = donors_mean, y = reorder(country, donors_mean),
+                     color = consent_law)) + 
+  geom_point(size=3) +
+  labs(x = "Donor Procurement Rate",
+       y = "", color = "Consent Law") +
+  theme(legend.position="top") +
+  facet_wrap(~consent_law)
 
 # Finally, add a title and remove gridlines. Once you are happy with your final Cleveland dot plot, save it.
+ggplot(data = by_country,
+       mapping = aes(x = donors_mean, y = reorder(country, donors_mean),
+                     color = consent_law)) + 
+  geom_point(size=3) +
+  labs(x = "Donor Procurement Rate",
+       y = "", color = "Consent Law") +
+  theme(legend.position="top") +
+  facet_wrap(~consent_law) +
+  ggtitle("Presumed donor consent laws lead to more donor procurement") +
+  theme_light() + 
+  theme(panel.grid.major  = element_blank()) 
+
 
 ggsave("plot2.png",
        plot = last_plot(),
