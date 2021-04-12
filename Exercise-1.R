@@ -43,6 +43,31 @@ p2
 # (3) Reorder the bars
 # (4) Choose a new color scheme
 
+#Here is my modifications for the second plot (p2)
+#To order the bars, the first thing I did is to replace the NA field to a category called "NA"
+rel_by_region$religion <- as.character(rel_by_region$religion)
+rel_by_region$religion[is.na(rel_by_region$religion)] <- "N/A"
+
+p2_b <- ggplot(rel_by_region, aes(x = reorder(religion, pct), y = pct, fill = religion, label = scales::percent(pct))) +
+  geom_col(position = "dodge2", stat = 'identity') +
+  labs(x = NULL, y = "Percentage", fill = "Religion") +
+  scale_y_continuous(labels=function(x) format(x, scientific = FALSE), expand = c(0,0), limits = c(0,100)) +
+  guides(fill = FALSE) + 
+  ggtitle("Religion Affiliation in U.S. by Regions",subtitle =  "Annual Estimated Bird Mortality from Selected Anthropogenic Causes in the U.S.") + 
+  theme(plot.subtitle = element_text(colour="gray40"), #change subtitle font 
+        axis.text.y = element_text(size = 11, colour="black"),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_line(size = 0.55, colour ="darkgray"),
+        panel.grid.major = element_blank(), #remove grids
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), #remove background color
+        plot.margin = unit(c(1,1,1,1), "cm"),
+        panel.spacing.x = unit(2, "lines")) + #add spaces between each facet so we can see the entire axis 
+  coord_flip() + 
+  facet_grid(~ bigregion)
+
+p2_b
+
 # Once you're happy with your changes, save your plot:
 ggsave("plot1.png",
   plot = last_plot(),
