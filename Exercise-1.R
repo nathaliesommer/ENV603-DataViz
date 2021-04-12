@@ -21,14 +21,32 @@ rel_by_region <- gss_sm %>%
 View(gss_sm)
 View(rel_by_region)
 
+install.packages("wesanderson")
+library(wesanderson)
+
+install.packages("RColorBrewer")
+library(RColorBrewer)
+
 # Now let's make some plots!
 
 p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
   geom_col(position = "dodge2") +
   labs(x = "Region",y = "Percent", fill = "Religion") +
-  theme(legend.position = "top")
+  theme(legend.position = "top") 
 
 p1
+
+p3 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
+  geom_col(position = "dodge2") +
+  labs(x = "Region",y = "Percent", fill = "Religion") +
+  theme(legend.position = "right") +
+  theme_bw() +
+  labs(title = "Religion Varies Across U.S. Regions") 
+
+p3
+
+p3 +
+  scale_fill_brewer(palette = "Set3")
 
 p2 <- ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
   geom_col(position = "dodge2") +
