@@ -5,7 +5,7 @@
 ggplot(data = by_country,
        mapping = aes(x = roads_mean, y = donors_mean)) + 
   geom_point() + 
-  geom_text(mapping = aes(label = country))
+  geom_text(mapping = aes(label = country), hjust=1)
 # This looks terrible. Let's adjust the position of the text. Within the geom_text(), add the argument for hjust=1
 
 # This still looks terrible. You could continue to mess around with values for hjust and get there eventually. Instead, let's call up a new package and explore how to add better labels to plots using a new dataset
@@ -21,7 +21,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
-  #geom_text_repel() +
+  geom_text_repel() +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -85,6 +85,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
        caption = "Wilson took advantage of a Republican split, winning 40 states with just 41.8% of the popular vote.") # adds a caption
 
 # annotate() can be used for other geoms too, including rectanges, line segments, and arrows
+view(elections_historic)
 
 ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
                                label = winner_label)) + 
@@ -92,18 +93,18 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
   geom_text_repel(data = subset(elections_historic,
-                                year %in% "1912" |
-                                winner %in% "John Quincy Adams")) +
-  annotate(geom="text", x = .3, y = .93,
-           label = "Wilson still performed better than \n Adams' 30% share of the popular vote.",
+                                year %in% "2000" |
+                                year %in% "1992")) +
+  annotate(geom="text", x = .3, y = .87,
+           label = "In the contentious 2000 election \n Bush won more of the popular vote \n than Clinton had.",
            hjust=0, 
            fontface="italic", 
-           color = "red") +
+           color = "blue") +
   annotate(geom = "segment", 
-           x = .41, xend = .32,
-           y = .78, yend = .37, 
-           colour = "red",
-           alpha = .4,
+           x = .48, xend = .43,
+           y = .50, yend = .69, 
+           colour = "blue",
+           alpha = .6,
            arrow =arrow()) +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
@@ -112,7 +113,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
        y = "Winner's share of electoral college vote", 
        title = "Presidential Elections: Popular & Electoral College Margins", 
        subtitle = "1824-2016",
-       caption = "Wilson took advantage of a Republican split, winning 40 states with just 41.8% of the popular vote.") # adds a caption
+       caption = "In 2000, George W. Bush received about 5% more of the popular vote than Clinton in 1992.") # adds a caption
 
 
 # Armed with the numerous examples from above, and using the elections_historic dataset, make a new graph that:
