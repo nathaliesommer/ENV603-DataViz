@@ -5,7 +5,7 @@
 ggplot(data = by_country,
        mapping = aes(x = roads_mean, y = donors_mean)) + 
   geom_point() + 
-  geom_text(mapping = aes(label = country))
+  geom_text(mapping = aes(label = country), hjust=1.5)
 # This looks terrible. Let's adjust the position of the text. Within the geom_text(), add the argument for hjust=1
 
 # This still looks terrible. You could continue to mess around with values for hjust and get there eventually. Instead, let's call up a new package and explore how to add better labels to plots using a new dataset
@@ -21,7 +21,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
-  #geom_text_repel() +
+  geom_text_repel() +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -84,7 +84,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
        subtitle = "1824-2016",
        caption = "Wilson took advantage of a Republican split, winning 40 states with just 41.8% of the popular vote.") # adds a caption
 
-# annotate() can be used for other geoms too, including rectanges, line segments, and arrows
+# annotate() can be used for other geoms too, including rectangles, line segments, and arrows
 
 ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
                                label = winner_label)) + 
@@ -121,8 +121,39 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
 # (3) Includes an annotated shape
 # Be sure to update the title and caption accordingly. 
 
+view(elections_historic)
+
+ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
+                               label = winner_label)) + 
+  geom_hline(yintercept = 0.5, size = 1.3, color = "gray80") +
+  geom_vline(xintercept = 0.5, size = 1.3, color = "gray80") +
+  geom_point() +
+  geom_text_repel(data = subset(elections_historic,
+                                year %in% "1860" |
+                                  winner %in% "Abraham Lincoln")) +
+  annotate(geom="text", x = .3, y = .93,
+           label = "Lincoln's share of vote grew significantly \n between first and second term.",
+           hjust=0, 
+           fontface="italic", 
+           color = "red") +
+  annotate(geom = "segment", 
+           x = .40, xend = .55,
+           y = .60, yend = .90, 
+           colour = "red",
+           alpha = .4,
+           arrow =arrow()) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  theme_classic() + # removes gridlines
+  labs(x = "Winner's share of popular vote", 
+       y = "Winner's share of electoral college vote", 
+       title = "Presidential Elections: Share of Popular & Electoral College Vote", 
+       subtitle = "1824-2016",
+       caption = "Lincoln had the greatest election-to-election increase in share of \n electoral college and popular vote of any two-term president.")
+
+
 # Save your plot: 
 
-ggsave("plot3.png",
+ggsave("Wraithwall_plot3.png",
        plot = last_plot(),
        dpi = 300)

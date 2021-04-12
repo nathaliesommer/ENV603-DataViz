@@ -6,7 +6,7 @@ ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
   geom_point()
 
-# What does the error message mean here? --> (comment your answer)
+# What does the error message mean here? --> 34 lines of the data are missing values
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
@@ -43,7 +43,8 @@ ggplot(data = organdata,
   geom_point() + 
   labs(x=NULL) + 
   coord_flip() + 
-  theme(legend.position = "top")
+  theme(legend.position = "top") +
+  geom_jitter()
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
 
@@ -54,7 +55,7 @@ by_country <- organdata %>% group_by(consent_law, country) %>%
 
 by_country
 
-# What happened inside this pipeline? --> (comment your answer here)
+# What happened inside this pipeline? --> Regrouped the data by the variable consent_law (informed vs. presumed) by county
 
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
@@ -62,13 +63,20 @@ ggplot(data = by_country,
                      color = consent_law)) + 
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
-       y = "", color = "Consent Law") +
+       y = "", color = "Consent Law", 
+       title = "Organ Transplants by OECD Countries: Informed vs. Presumed Consent") +
+  facet_wrap(~ consent_law) +
+  theme_bw() + theme(strip.background  = element_blank(),
+                     panel.grid.major = element_line(colour = "grey80"),
+                     panel.border = element_blank(),
+                     panel.grid.minor.x=element_blank(),
+                     panel.grid.major.x=element_blank() ) +
   theme(legend.position="top")
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
 
 # Finally, add a title and remove gridlines. Once you are happy with your final Cleveland dot plot, save it.
 
-ggsave("plot2.png",
+ggsave("Wraithwall_plot2.png",
        plot = last_plot(),
        dpi = 300)
