@@ -48,12 +48,16 @@ p2
 rel_by_region$religion <- as.character(rel_by_region$religion)
 rel_by_region$religion[is.na(rel_by_region$religion)] <- "N/A"
 
-p2_b <- ggplot(rel_by_region, aes(x = reorder(religion, pct), y = pct, fill = religion, label = scales::percent(pct))) +
-  geom_col(position = "dodge2", stat = 'identity') +
+#Use RcolorBrewer package to choose a new color scheme
+library(RColorBrewer)
+
+p2_b <- ggplot(rel_by_region, aes(x = reorder(religion, pct), y = pct, fill = religion)) +
+  geom_col(position = "dodge2") +
   labs(x = NULL, y = "Percentage", fill = "Religion") +
   scale_y_continuous(labels=function(x) format(x, scientific = FALSE), expand = c(0,0), limits = c(0,100)) +
+  geom_text(aes(label=pct), hjust=-0.5) +
   guides(fill = FALSE) + 
-  ggtitle("Religion Affiliation in U.S. by Regions",subtitle =  "Annual Estimated Bird Mortality from Selected Anthropogenic Causes in the U.S.") + 
+  ggtitle("Religion Affiliation in U.S. by Regions",subtitle =  "Protestant is the largest religious group across the country ") + 
   theme(plot.subtitle = element_text(colour="gray40"), #change subtitle font 
         axis.text.y = element_text(size = 11, colour="black"),
         axis.ticks.y = element_blank(),
@@ -66,9 +70,9 @@ p2_b <- ggplot(rel_by_region, aes(x = reorder(religion, pct), y = pct, fill = re
   coord_flip() + 
   facet_grid(~ bigregion)
 
-p2_b
+p2_b + scale_fill_brewer(palette = "Dark2")
 
 # Once you're happy with your changes, save your plot:
-ggsave("plot1.png",
+ggsave("Exercise1_Plot2_Revised.png",
   plot = last_plot(),
   dpi = 300)
