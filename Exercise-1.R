@@ -8,15 +8,15 @@ library(socviz)
 
 # Create a new table called rel_by_region
 
-rel_by_region <- gss_sum %>%
+rel_by_region <- gss_sm %>%
   group_by(bigregion, religion) %>%
   summarize(N = n()) %>%
   mutate(freq = N / sum(N),
          pct = round((freq*100), 0))
 
-# See how the pipeline above has taked the gss_sm dataframe and transformed it into a summary table.
+# See how the pipeline above took the gss_sm dataframe and transformed it into a summary table.
 
-View(gss_sum)
+View(gss_sm)
 View(rel_by_region)
 
 # Now let's make some plots!
