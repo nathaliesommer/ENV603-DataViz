@@ -7,6 +7,7 @@ ggplot(data = organdata,
   geom_point()
 
 # What does the error message mean here? --> (comment your answer)
+# Answer: 34 lines of the data are missing values
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
@@ -17,7 +18,8 @@ ggplot(data = organdata,
 # Leaving the timeseries aside, we can also look at the number of donors by country:
 ggplot(data = organdata,
        mapping = aes(x = country, y = donors)) + 
-  geom_boxplot()
+  geom_boxplot() +
+  coord_flip()
 
 # This doesn't look great... try adding coord_flip() to the code above.
 
@@ -43,7 +45,8 @@ ggplot(data = organdata,
   geom_point() + 
   labs(x=NULL) + 
   coord_flip() + 
-  theme(legend.position = "top")
+  theme(legend.position = "top") +
+  geom_jitter()
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
 
@@ -55,6 +58,7 @@ by_country <- organdata %>% group_by(consent_law, country) %>%
 by_country
 
 # What happened inside this pipeline? --> (comment your answer here)
+# regrouping by variable consent_law by country 
 
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
@@ -63,7 +67,8 @@ ggplot(data = by_country,
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
        y = "", color = "Consent Law") +
-  theme(legend.position="top")
+  facet_wrap(~consent_law) +
+  theme(legend.position="top") 
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
 
