@@ -1,32 +1,42 @@
-#### ENV 603 / 5-April-2021 / N.R. Sommer
+#### ENV 603 / 11-April-2021 / Aymane Eddahmani
 # Dataset 1: Religion by region
 
-# If you have not yet installed these libraries, use install.packages("")
 
 library(tidyverse)
 library(socviz)
+library(RColorBrewer)
+library(viridis)
 
 # Create a new table called rel_by_region
-
-rel_by_region <- gss_sum %>%
+rel_by_region <- gss_sm %>%
   group_by(bigregion, religion) %>%
   summarize(N = n()) %>%
   mutate(freq = N / sum(N),
          pct = round((freq*100), 0))
 
-# See how the pipeline above has taked the gss_sm dataframe and transformed it into a summary table.
 
-View(gss_sum)
+
+View(gss_sm)
 View(rel_by_region)
 
 # Now let's make some plots!
 
-p1 <- ggplot(rel_by_region, aes(x = bigregion, y = pct, fill = religion)) + 
-  geom_col(position = "dodge2") +
-  labs(x = "Region",y = "Percent", fill = "Religion") +
-  theme(legend.position = "top")
 
+
+#reordering the levels:
+rel_by_region$religion <- factor(rel_by_region$religion, levels = c("Protestant", "Catholic", "None", "Jewish","Other"))
+
+#changed the color scale. grid lines, and general formatting 
+p1 <- rel_by_region %>% filter(!is.na(religion))  %>%  ggplot(aes(x = bigregion, y = pct, fill = religion)) + 
+  geom_col(position = "dodge2") +
+  theme_minimal()+
+  labs(x = "Region",y = "Percentage", fill = "Religion", title = "Most Americans in all major US regions affiliate with a religion") +
+  theme(legend.position = "right",panel.grid.major.x = element_blank())+
+  scale_fill_viridis(discrete= TRUE)
 p1
+ggsave("plot1.png",
+       plot = last_plot(),
+       dpi = 300)
 
 p2 <- ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
   geom_col(position = "dodge2") +
@@ -36,14 +46,3 @@ p2 <- ggplot(rel_by_region, aes(x = religion, y = pct, fill = religion)) +
   facet_grid(~ bigregion)
 
 p2
-
-# Make modifications to either plot. Google is your friend here. A few suggestions:
-# (1) Add a title
-# (2) Remove the gridlines
-# (3) Reorder the bars
-# (4) Choose a new color scheme
-
-# Once you're happy with your changes, save your plot:
-ggsave("plot1.png",
-  plot = last_plot(),
-  dpi = 300)

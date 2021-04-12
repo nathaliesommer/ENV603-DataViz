@@ -5,7 +5,7 @@
 ggplot(data = by_country,
        mapping = aes(x = roads_mean, y = donors_mean)) + 
   geom_point() + 
-  geom_text(mapping = aes(label = country))
+  geom_text(mapping = aes(label = country), hjust=1)
 # This looks terrible. Let's adjust the position of the text. Within the geom_text(), add the argument for hjust=1
 
 # This still looks terrible. You could continue to mess around with values for hjust and get there eventually. Instead, let's call up a new package and explore how to add better labels to plots using a new dataset
@@ -21,7 +21,7 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
   geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
   geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
   geom_point() +
-  #geom_text_repel() +
+  geom_text_repel() +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Winner's share of popular vote", 
@@ -121,7 +121,41 @@ ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
 # (3) Includes an annotated shape
 # Be sure to update the title and caption accordingly. 
 
-# Save your plot: 
+ggplot(elections_historic, aes(x = popular_pct, y = ec_pct,
+                               label = winner_label)) + 
+  geom_hline(yintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_vline(xintercept = 0.5, size = 1.4, color = "gray80") +
+  geom_point() +
+  annotate(geom="text", x = .48, y = .4,
+           label = "Johnson won the highest share of popular vote \n while adams won the lowest share: \n a difference of 30%",
+           hjust=0.5, 
+           fontface="italic", 
+           color = "red") +
+  annotate(geom = "segment", 
+           x = .6105, xend = .309,
+           y = .321, yend = .321, 
+           colour = "red",
+           alpha = .4,
+           arrow =arrow(ends = "both")) +
+  annotate(geom = "segment", 
+           x = .6105, xend = .6105,
+           y = .9031, yend = .321, 
+           colour = "black",
+           alpha = .2, linetype = "dashed") + #add grey dashed line to highlight horizontal different between two points
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_text_repel(data = subset(elections_historic,
+                                popular_pct %in% max(popular_pct) | popular_pct %in% min(popular_pct)))+
+  theme_classic() + # removes gridlines
+  labs(x = "Winner's share of popular vote", 
+       y = "Winner's share of electoral college vote", 
+       title = "Presidential Elections: Popular & Electoral College Margins", 
+       subtitle = "1824-2016",
+       caption = "It seems Johnson was waaaaaay more popular than Adams.")+
+  theme(plot.caption = element_text(hjust = 0.5)) #center caption
+
+
+
 
 ggsave("plot3.png",
        plot = last_plot(),

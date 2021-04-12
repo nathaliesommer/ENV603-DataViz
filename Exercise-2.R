@@ -6,7 +6,7 @@ ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
   geom_point()
 
-# What does the error message mean here? --> (comment your answer)
+# What does the error message mean here? --> there are rows with missing values in the dataset. geom_point has not plotted those
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
@@ -17,7 +17,8 @@ ggplot(data = organdata,
 # Leaving the timeseries aside, we can also look at the number of donors by country:
 ggplot(data = organdata,
        mapping = aes(x = country, y = donors)) + 
-  geom_boxplot()
+  geom_boxplot()+
+  coord_flip()
 
 # This doesn't look great... try adding coord_flip() to the code above.
 
@@ -43,7 +44,8 @@ ggplot(data = organdata,
   geom_point() + 
   labs(x=NULL) + 
   coord_flip() + 
-  theme(legend.position = "top")
+  theme(legend.position = "top")+
+  geom_jitter(width = 0.2, height =0.5)
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
 
@@ -52,9 +54,9 @@ by_country <- organdata %>% group_by(consent_law, country) %>%
   summarize_if(is.numeric, funs(mean, sd), na.rm = TRUE) %>%
   ungroup()
 
-by_country
+View(by_country)
 
-# What happened inside this pipeline? --> (comment your answer here)
+# What happened inside this pipeline? --> grouped the data by consent_law and Country, then computed the mean and sd deviations of numeric variables for the groups.
 
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
@@ -62,12 +64,16 @@ ggplot(data = by_country,
                      color = consent_law)) + 
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
-       y = "", color = "Consent Law") +
-  theme(legend.position="top")
+       y = "", color = "Consent Law", title = "Organ Transplants for OECD Countries") +
+  theme_light()+
+  theme(legend.position = "right")+
+  facet_wrap(~consent_law, ncol = 1, scales= "fixed")
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
-
 # Finally, add a title and remove gridlines. Once you are happy with your final Cleveland dot plot, save it.
+
+
+# I did not remove grid lines as the figure becomes harder to read especially with empty lines for countries not in that facet. I left both the facet and color legend as requested, though I think it is redundant. If anything, I think the intial version without facets works best as it summarised everything in one plot.
 
 ggsave("plot2.png",
        plot = last_plot(),
